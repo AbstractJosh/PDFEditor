@@ -1,0 +1,70 @@
+﻿<Window x:Class="PDFEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        Title="PDFEditor" Height="1000" Width="1400">
+
+    <!-- 1) Resources MUST be before use -->
+    <Window.Resources>
+        <Style x:Key="WatermarkTextBox" TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                            <TextBlock x:Name="Watermark"
+                                       Text="{TemplateBinding Tag}"
+                                       Foreground="Gray"
+                                       Margin="4,2,0,0"
+                                       IsHitTestVisible="False"
+                                       Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="Watermark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- 2) Now the content -->
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Click="NewPdf_Click" Content="New PDF" Margin="2"/>
+            <Button Click="OpenPdf_Click" Content="Open PDF" Margin="2"/>
+            <Separator/>
+            <Button Click="SaveAs_Click" Content="Save As..." Margin="2"/>
+            <Separator/>
+            <Button Click="AddText_Click" Content="Add Text to Page" />
+        </ToolBar>
+
+        <Grid DockPanel.Dock="Top" Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Uses the style defined above -->
+            <TextBox x:Name="TxtContent" Grid.Column="0" Height="26" Margin="0,0,6,0"
+                     Style="{StaticResource WatermarkTextBox}" Tag="Text to add..." />
+            <!-- … the rest of your inputs … -->
+
+            
+        </Grid>
+
+        <wfi:WindowsFormsHost x:Name="WinFormsHost"/>
+    </DockPanel>
+</Window>
